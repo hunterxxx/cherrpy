@@ -22,7 +22,7 @@ The webserver should now be running on http://localhost:5000. Editing app.py wil
 ## Deploying to Heroku (Deployed)
 
 Install the [Heroku toolbelt](https://toolbelt.heroku.com/), and make sure you commit your changes to git.
-Heroku link : https://fierce-lowlands-48929.herokuapp.com/
+<br/>Heroku link : https://fierce-lowlands-48929.herokuapp.com/
 
 
 If all goes well, you can open your app in the browser:
