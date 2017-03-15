@@ -4,7 +4,6 @@ import wikipedia
 #wiki text scrap
 from bs4 import BeautifulSoup
 #html request
-from wikiapi import WikiApi
 import requests
 from cherrypy.lib import static
 import cherrypy
