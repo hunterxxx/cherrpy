@@ -70,11 +70,6 @@ class Table_of_content(object):
             content.append(link.text)
         return content
 
-    def parse_content(self):
-        
-
-
-
 class Contents(object):
     def __init__(self):
         title = self.title
