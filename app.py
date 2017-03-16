@@ -1,5 +1,7 @@
 #wikipedia api is easy but not for advanced usage, thus BeautifulSoup is used
 from pptx import Presentation
+prs = Presentation()
+
 import wikipedia
 #wiki text scrap
 from bs4 import BeautifulSoup
@@ -20,18 +22,15 @@ url= "https://en.wikipedia.org/wiki/" + "Leipzig"
 content = requests.get(url).content
 soup = BeautifulSoup(content, 'lxml')
 
-class HelloWorld(object):
-    @cherrypy.expose
-    def index(self):
-        return """
-        <html><body>
-            <h2>Enter a City</h2>
-            <form action="powerpoint" method="get">
-            Enter a city: <input type="text" name="city_name" /><br />
-            <input type="submit" />
-            </form>
-        </body></html>
-        """
+class Slide_1(object):
+    def __init__(self,city_name):
+        title_slide_layout = prs.slide_layouts[0]
+        slide = prs.slides.add_slide(title_slide_layout)
+        title = slide.shapes.title
+        subtitle = slide.placeholders[1]
+        title.text = self.wiki_title(city_name)
+        subtitle.text = self.wiki_subtitle(city_name)
+        image = self.wiki_image(city_name)
 
     def wiki_title(self,city_name):
         city = wikipedia.page(city_name)
@@ -46,22 +45,8 @@ class HelloWorld(object):
         city = wikipedia.page(city_name)
         return city.images[0]
 
-
-    @cherrypy.expose
-    def powerpoint(self, city_name):
-        data_to_show = ['Hello', 'world']
-        tmpl = env.get_template('index.html')
-
-        prs = Presentation()
-
-        #slide 1
-        title_slide_layout = prs.slide_layouts[0]
-        slide = prs.slides.add_slide(title_slide_layout)
-        title = slide.shapes.title
-        subtitle = slide.placeholders[1]
-        image = self.wiki_image(city_name)
-
-        #slide 2
+class Slide_2(object):
+    def __init__(self, city_name):
         title_slide_layouts = prs.slide_layouts[1]
         slides = prs.slides.add_slide(title_slide_layouts)
         titles = slides.shapes.title
@@ -69,13 +54,39 @@ class HelloWorld(object):
         titles.text = "Hello 2"
         subtitles.text = "lala"
 
-        title.text = self.wiki_title(city_name)
-        subtitle.text = self.wiki_subtitle(city_name)
+class Table_of_content(object):
+    def __init__(self):
+        content = self.content
 
+class Contents(object):
+    def __init__(self):
+        title = self.title
+
+class References(object):
+    def __init__(self):
+        title = self.title
+
+class HelloWorld(object):
+    @cherrypy.expose
+    def index(self):
+        return """
+        <html><body>
+            <h2>Enter a City</h2>
+            <form action="powerpoint" method="get">
+            Enter a city: <input type="text" name="city_name" /><br />
+            <input type="submit" />
+            </form>
+        </body></html>
+        """
+
+    @cherrypy.expose
+    def powerpoint(self, city_name):
+        Slide_1(city_name)
+        Slide_2(city_name)
+        
         prs.save(city_name + '.pptx')
         #TODO catch exception 
         return self.download(city_name)
-        #return tmpl.render(data=data_to_show)
 
     @cherrypy.expose
     def download(self, city_name):
