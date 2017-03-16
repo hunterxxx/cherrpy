@@ -61,6 +61,7 @@ class Table_of_content(object):
         content = requests.get(url).content
         soup = BeautifulSoup(content, 'lxml')
 
+    def all_content(self):
         tag = soup.find('div', {'class': 'toclevel1'})
         links=tag.findAll('a')
         content=[]
@@ -68,6 +69,9 @@ class Table_of_content(object):
         for link in links:
             content.append(link.text)
         return content
+
+    def parse_content(self):
+        
 
 
 
@@ -88,7 +92,7 @@ class Landing_Page(object):
     @cherrypy.expose
     def check_validity(self,city_name):
         try:
-            self.powerpoint(city_name)
+            return self.powerpoint(city_name)
         except wikipedia.exceptions.DisambiguationError as e:
             return e.options
 
@@ -105,8 +109,10 @@ class Landing_Page(object):
     @cherrypy.expose
     def download(self, city_name):
         path = os.path.join(absDir, city_name + ".pptx")
-        return static.serve_file(path, "application/x-download",
-                                 "attachment", os.path.basename(path))
+        result = static.serve_file(path, "application/x-download",
+                                 "attachment", name = os.path.basename(path))
+        #os.unlink(filename)
+        return result
 
 
 config = {
