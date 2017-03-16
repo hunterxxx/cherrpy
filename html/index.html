@@ -1,8 +1,11 @@
 {% extends "layout.html" %}
 {% block body %}
-    <ul>
-    {% for item in data %}
-        <li>{{ item }}</li>
-    {% endfor %}
-    </ul>
+<ul>
+	<h2>Enter a City</h2>
+	<form action="powerpoint" method="post">
+	Enter a city: <input type="text" name="city_name"}}><br />
+		<input type="submit" />
+	</form>
+</ul>
 {% endblock %}
+

@@ -55,8 +55,21 @@ class Slide_2(object):
         subtitles.text = "lala"
 
 class Table_of_content(object):
-    def __init__(self):
-        content = self.content
+    def __init__(self,city_name):
+        #beautifulsoup library
+        url= "https://en.wikipedia.org/wiki/" + city_name
+        content = requests.get(url).content
+        soup = BeautifulSoup(content, 'lxml')
+
+        tag = soup.find('div', {'class': 'toclevel1'})
+        links=tag.findAll('a')
+        content=[]
+
+        for link in links:
+            content.append(link.text)
+        return content
+
+
 
 class Contents(object):
     def __init__(self):
@@ -69,20 +82,21 @@ class References(object):
 class Landing_Page(object):
     @cherrypy.expose
     def index(self):
-        return """
-        <html><body>
-            <h2>Enter a City</h2>
-            <form action="powerpoint" method="get">
-            Enter a city: <input type="text" name="city_name" /><br />
-            <input type="submit" />
-            </form>
-        </body></html>
-        """
+        tmpl = env.get_template('index.html')
+        return tmpl.render()
+
+    @cherrypy.expose
+    def check_validity(self,city_name):
+        try:
+            self.powerpoint(city_name)
+        except wikipedia.exceptions.DisambiguationError as e:
+            return e.options
 
     @cherrypy.expose
     def powerpoint(self, city_name):
         Slide_1(city_name)
         Slide_2(city_name)
+        #Table_of_content(city_name)
         
         prs.save(city_name + '.pptx')
         #TODO catch exception 
