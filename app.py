@@ -26,10 +26,10 @@ class Slide_1(object):
         subtitle = slide.placeholders[1]
         title.text = self.wiki_title(city_name)
         subtitle.text = self.wiki_subtitle(city_name)
-        img_path = self.wiki_image(city_name)
+        #img_path = self.wiki_image(city_name)
         left = Inches(4.5)
         top = Inches(1)
-        pic = slide.shapes.add_picture(img_path, left, top, width=1280160, height=1371600)
+        #pic = slide.shapes.add_picture(img_path, left, top, width=1280160, height=1371600)
 
     def wiki_title(self,city_name):
         city = wikipedia.page(city_name)
