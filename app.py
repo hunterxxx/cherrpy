@@ -1,6 +1,7 @@
 #wikipedia api is easy but not for advanced usage, thus BeautifulSoup is used
 from pptx import Presentation
 prs = Presentation()
+from pptx.util import Inches
 
 import wikipedia
 #wiki text scrap
@@ -17,11 +18,6 @@ absDir = os.path.join(os.getcwd(), localDir)
 
 env = Environment(loader=FileSystemLoader('html'))
 
-#beautifulsoup library
-url= "https://en.wikipedia.org/wiki/" + "Leipzig"
-content = requests.get(url).content
-soup = BeautifulSoup(content, 'lxml')
-
 class Slide_1(object):
     def __init__(self,city_name):
         title_slide_layout = prs.slide_layouts[0]
@@ -30,7 +26,10 @@ class Slide_1(object):
         subtitle = slide.placeholders[1]
         title.text = self.wiki_title(city_name)
         subtitle.text = self.wiki_subtitle(city_name)
-        image = self.wiki_image(city_name)
+        img_path = self.wiki_image(city_name)
+        left = Inches(4.5)
+        top = Inches(1)
+        pic = slide.shapes.add_picture(img_path, left, top, width=1280160, height=1371600)
 
     def wiki_title(self,city_name):
         city = wikipedia.page(city_name)
@@ -39,6 +38,7 @@ class Slide_1(object):
     def wiki_subtitle(self,city_name):
         summary = wikipedia.summary(city_name, sentences=1)
         #shorten_summary = 
+        #mit regex machen
         return summary
 
     def wiki_image(self,city_name):
@@ -66,7 +66,7 @@ class References(object):
     def __init__(self):
         title = self.title
 
-class HelloWorld(object):
+class Landing_Page(object):
     @cherrypy.expose
     def index(self):
         return """
@@ -107,4 +107,4 @@ config = {
     }
 }
 
-cherrypy.quickstart(HelloWorld(), '/', config=config)
+cherrypy.quickstart(Landing_Page(), '/', config=config)
